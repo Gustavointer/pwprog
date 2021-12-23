@@ -55,17 +55,17 @@
     <h1 class="h3 mb-3 fw-normal">Faça seu login</h1>
 
     <div class="form-floating">
-      <input type="text" class="form-control" id="floatingInput" placeholder="Usuário" name="usuario">
+      <input type="text" class="form-control" id="floatingInput" placeholder="Usuário" name="username">
       <label for="floatingInput">Usuário</label>
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" name="senha">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" name="password">
       <label for="floatingPassword">Senha</label>
     </div>
 
     <div class="checkbox mb-3">
       <label>
-        <input type="checkbox" value="remember-me"> Lembrar
+        <input type="checkbox" name="lembrar" value="remember-me"> Lembrar
       </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Entrar</button>

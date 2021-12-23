@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class UsuariosController extends Controller
 {
@@ -24,13 +26,14 @@ class UsuariosController extends Controller
     {
         $usuario = new Usuario();
 
-        $usuario->nome = $form->nome;
+        $usuario->name = $form->name;
         $usuario->email = $form->email;
-        $usuario->usuario = $form->usuario;
-        $usuario->senha = Hash::make($form->senha);
+        $usuario->username = $form->username;
+        $usuario->password = Hash::make($form->password);
 
         $usuario->save();
-
+        event(new Registered($usuario));
+        return redirect()->route('verification.notice');
         return redirect()->route('usuarios.index');
     }
 
@@ -38,37 +41,32 @@ class UsuariosController extends Controller
     public function login(Request $form)
     {
         // Está enviando o formulário
-        if ($form->isMethod('POST'))
-        {
-            $usuario = $form->usuario;
-            $senha = $form->senha;
-
-            $consulta = Usuario::select('id', 'nome', 'email', 'usuario', 'senha')->where('usuario', $usuario)->get();
-
-            // Confere se encontrou algum usuário
-            if ($consulta->count())
-            {
-                // Confere se a senha está correta
-                if (Hash::check($senha, $consulta[0]->senha))
-                {
-                    unset($consulta[0]->senha);
-
-                    session()->put('usuario', $consulta[0]);
-
-                    return redirect()->route('home');
-                }
+        if ($form->isMethod('POST')){
+            // Se um dos campos não for preenchidos, nem tenta o login e volta
+            // para a página anterior
+            $credenciais = $form->validate([
+                'username' => ['required'],
+                'password' => ['required'],
+            ]);
+            // Tenta o login
+            if (Auth::attempt($credenciais, $form->lembrar)){
+                session()->regenerate();
+                return redirect()->route('home');
+            }else{
+                // Login deu errado (usuário ou senha inválidos)
+                return redirect()->route('login')->with('erro', 'Usuário ou senha inválidos.');
             }
-
-            // Login deu errado (usuário ou senha inválidos)
-            return redirect()->route('login')->with('erro', 'Usuário ou senha inválidos.');
         }
-
         return view('usuarios.login');
     }
 
-    public function logout()
+    //validação de sessão de logout
+    public function logout(Request $request)
     {
-        session()->forget('usuario');
+        Auth::logout();
+        $request->session()->invalidate(); /*vai validar a sessão*/
+        $request->session()->regenerateToken(); /*vai gerar um novo token para quebrar a sessão que já tinha*/
         return redirect()->route('home');
     }
+
 }

@@ -29,9 +29,9 @@ class ProdutosController extends Controller
     {
         $prod = new Produto();
 
-        $prod->nome = $form->nome;
-        $prod->preco = $form->preco;
-        $prod->descricao = $form->descricao;
+        $prod->name = $form->nome;
+        $prod->price = $form->preco;
+        $prod->description = $form->descricao;
 
         $prod->save();
 

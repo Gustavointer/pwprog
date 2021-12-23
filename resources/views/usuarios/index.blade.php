@@ -7,8 +7,6 @@
     <div class="col">
         <p>Sejam bem-vindos à página de usuários</p>
 
-        <a class="btn btn-primary" href="{{route('usuarios.inserir')}}" role="button">Cadastrar usuário</a>
-
     </div>
 </div>
 
@@ -21,9 +19,10 @@
         </tr>
 
         @foreach ($usuarios as $usuario)
-        <tr>
+        
+        <tr @if($usuario->admin)class="table-info" @endif>
             <td>{{ $usuario->id }}</td>
-            <td>{{ $usuario->nome }}</td>
+            <td>{{ $usuario->name }}</td>
             <td>{{ $usuario->email }}</td>
         </tr>
         @endforeach

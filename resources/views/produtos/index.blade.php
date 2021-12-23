@@ -6,8 +6,6 @@
 <div class="row">
     <div class="col">
         <p>Sejam bem-vindos à página de produtos</p>
-
-        <a class="btn btn-primary" href="{{route('produtos.inserir')}}" role="button">Cadastrar produto</a>
     </div>
 </div>
 
@@ -24,12 +22,14 @@
         <tr>
             <td>{{$prod->id}}</td>
             <td>
-                <a href="{{ route('produtos.show', $prod) }}">{{$prod->nome}}</a>
+                <a href="{{ route('produtos.show', $prod) }}">{{$prod->name}}</a>
             </td>
-            <td>R$ {{$prod->preco}}</td>
+            <td>R$ {{$prod->price}}</td>
             <td>
-                <a href="{{ route('produtos.edit', $prod) }}" class="btn btn-primary btn-sm" role="button"><i class="bi bi-pencil-square"></i> Editar</a>
-                <a href="{{ route('produtos.remove', $prod) }}" class="btn btn-danger btn-sm" role="button"><i class="bi bi-trash"></i> Apagar</a>
+            <td>{{$prod->description}}</td>
+            <td>
+                @if(Auth::user() && Auth::user()->admin)<a href="{{ route('produtos.edit', $prod) }}" class="btn btn-primary btn-sm" role="button"><i class="bi bi-pencil-square"></i> Editar</a>
+                <a href="{{ route('produtos.remove', $prod) }}" class="btn btn-danger btn-sm" role="button"><i class="bi bi-trash"></i> Apagar</a>@endif
             </td>
         </tr>
         @endforeach
