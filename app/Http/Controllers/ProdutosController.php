@@ -10,7 +10,7 @@ class ProdutosController extends Controller
     
     public function index()
     {
-        $produtos = Produto::orderBy('id', 'desc')->get();
+        $produtos = Produto::orderBy('name', 'asc')->get();
 
         return view('produtos.index', ['prods' => $produtos, 'pagina' => 'produtos']);
     }
@@ -25,16 +25,17 @@ class ProdutosController extends Controller
         return view('produtos.create', ['pagina' => 'produtos']);
     }
 
-    public function insert(Request $form)
+    public function insert(Request $formulario)
     {
+        $imagemCaminho = $formulario->file('imagem')->store('', 'imagens');
+        
         $prod = new Produto();
-
-        $prod->name = $form->nome;
-        $prod->price = $form->preco;
-        $prod->description = $form->descricao;
-
+        $prod->name = $formulario->nome;
+        
+        $prod->price = $formulario->preco;
+        $prod->description = $formulario->descricao;
+        $prod->imagem = $imagemCaminho;
         $prod->save();
-
         return redirect()->route('produtos');
     }
 

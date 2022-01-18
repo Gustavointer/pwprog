@@ -6,11 +6,21 @@
 <div class="row">
     <div class="col">
         <p>Sejam bem-vindos à página de produtos</p>
+        <a href="{{route('produtos.inserir')}}" class="btn btn-primary">Inserir Produto</a>
     </div>
 </div>
 
 <div class="row">
-    <table class="table">
+        <ul>
+            @foreach($prods as $prod)
+                <li><img src="{{asset('img/' . $prod->imagem)}}"></li>
+                <li><a href="{{ route('produtos.show', $prod) }}">{{$prod->name}}</a></li>
+                <li>R$ {{$prod->price}}</li>
+                <hr>
+            @endforeach
+        </ul>
+        
+<!--   <table class="table">
         <tr>
             <th>ID</th>
             <th width="50%">Nome</th>
@@ -33,6 +43,6 @@
             </td>
         </tr>
         @endforeach
-    </table>
+    </table>-->
 </div>
 @endsection
